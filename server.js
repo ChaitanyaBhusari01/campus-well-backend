@@ -8,9 +8,9 @@ const {port} = require('./config');
 const app = express();
 app.use(express.json());
 
-const {userRouter} = require('./routes/admin');
-const {courseRouter} = require('./routes/counsellor');
-const {adminRouter} = require('./routes/student');
+const {adminRouter} = require('./routes/admin');
+const {consellorRouter} = require('./routes/counsellor');
+const {studentRouter} = require('./routes/student');
 
 
 
