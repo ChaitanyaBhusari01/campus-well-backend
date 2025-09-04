@@ -44,9 +44,9 @@ adminRouter.post('/signin',async function (req,res){
         res.json({message : "password is incorrect"});
         return;
     }
-    const token = JWT.sign(admin.email,JWT_ADMIN_SECRET);
-    localStorage.setItem({token : token});
-    res.json({message : "user is signed up"})
+    const token = JWT.sign({email:admin.email},JWT_ADMIN_SECRET);
+    
+    res.json({message : "user is signed up",token})
     
 });    
 

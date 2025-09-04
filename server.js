@@ -9,14 +9,14 @@ const app = express();
 app.use(express.json());
 
 const {adminRouter} = require('./routes/admin');
-const {consellorRouter} = require('./routes/counsellor');
+const {counsellorRouter} = require('./routes/counsellor');
 const {studentRouter} = require('./routes/student');
 
 
 
-app.use("/user",userRouter);
+app.use("/user",studentRouter);
 app.use("/admin",adminRouter);
-app.use("/course",courseRouter);
+app.use("/course",counsellorRouter);
 
 async function main(){
     await mongoose.connect(mongodburl);
