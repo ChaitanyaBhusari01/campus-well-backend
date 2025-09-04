@@ -1,6 +1,9 @@
+const express = require('express');
+const mongoose = require('mongoose');
+
 const { MONGODBURL } = require("./congig");
 
-mongoose.connect(mongodburl)
+mongoose.connect(MONGODBURL)
 .then(()=>{
     console.log("mongodb connected successfully");
 })
@@ -35,11 +38,14 @@ const counsellorSchema = new Schema({
   availability: { type: Boolean, default: true } // whether counsellor is available for sessions
 });
 
+const adminModel = mongoose.model(adminSchema,admin);
+const studentModel = mongoose.model(studentSchema,student);
+const counsellorModel = mongoose.model(counsellorSchema,counsellor);
 
 module.exports = {
-    userSchema,
-    adminSchema,
-    counsellorSchema,
+    studentModel,
+    adminModel,
+    counsellorModel
 };
 
  

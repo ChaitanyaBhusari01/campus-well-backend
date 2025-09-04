@@ -1,0 +1,13 @@
+const JWT_ADMIN_SECRET = process.env.JWT_ADMIN_SECRET;
+const JWT_STUDENT_SECRET = process.env.JWT_STUDENT_SECRET;
+const JWT_COUNSELLOR_SECRET = process.env.JWT_COUNSELLOR_SECRET;
+const PORT = process.env.PORT;
+const MONGODBURL = process.env.MONGODBURL;
+
+module.exports = {
+    JWT_ADMIN_SECRET,
+    JWT_COUNSELLOR_SECRET,
+    JWT_STUDENT_SECRET,
+    PORT,
+    MONGODBURL,
+};
