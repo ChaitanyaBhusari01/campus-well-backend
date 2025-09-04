@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require ('express');
 const JWT = require ('jsonwebtoken');
 const mongoose = require('mongoose');
-const {mongodburl} = require('./config');
+const {mongodburl, MONGODBURL} = require('./config');
 const {port} = require('./config');
 
 const app = express();
@@ -16,10 +16,10 @@ const {studentRouter} = require('./routes/student');
 
 app.use("/user",studentRouter);
 app.use("/admin",adminRouter);
-app.use("/course",counsellorRouter);
+app.use("/counsellor",counsellorRouter);
 
 async function main(){
-    await mongoose.connect(mongodburl);
+    await mongoose.connect(MONGODBURL);
     app.listen(port,()=>{
         console.log(`lsitening on ${port}`);
     });

@@ -36,17 +36,16 @@ counsellorRouter.post('/signin',async function (req,res){
         email  : email,
     });
     if(!counsellor){
-        res.status(400).json({message : "the user is not signed up"});
-        return;
+        return res.status(400).json({message : "the counsellor is not signed up"});
     }
-    const compare = await bcrypt.compare(password,counsellor.password);  
-    if(!compare){
-        res.json({message : "password is incorrect"});
-        return;
+    const match = await bcrypt.compare(password,counsellor.password);  
+    if(!match){
+        return res.json({message : "password is incorrect"});
+        
     }
-    const token = JWT.sign(counsellor.email,JWT_COUNSELLOR_SECRET);
-    localStorage.setItem({token : token});
-    res.json({message : "user is signed up"})
+    const token = JWT.sign({email : counsellor.email},JWT_COUNSELLOR_SECRET);
+    
+    return res.json({message : "counsellor is signed in",token});
     
 });    
 

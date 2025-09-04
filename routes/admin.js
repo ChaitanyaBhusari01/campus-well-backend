@@ -10,7 +10,6 @@ adminRouter.post('/signup',async function (req,res){
     const {name ,email , password, campusId ,campusName } =req.body;
     const admin = await adminModel.findOne({
         email  : email,
-        password : password,
     });
     if(admin){
        return res.status(400).json({ message: "Admin already exists. Please login." }); 
@@ -36,7 +35,7 @@ adminRouter.post('/signin',async function (req,res){
         email  : email,
     });
     if(!admin){
-        res.status(400).json({message : "the user is not signed up"});
+        res.status(400).json({message : "the admin is not signed up"});
         return;
     }
     const compare = await bcrypt.compare(password,admin.password);  
@@ -46,7 +45,7 @@ adminRouter.post('/signin',async function (req,res){
     }
     const token = JWT.sign({email:admin.email},JWT_ADMIN_SECRET);
     
-    res.json({message : "user is signed up",token})
+    res.json({message : "admin is signed in",token})
     
 });    
 

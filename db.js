@@ -1,8 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-const { MONGODBURL } = require("./congig");
-
+const { MONGODBURL } = require("./config");
 mongoose.connect(MONGODBURL)
 .then(()=>{
     console.log("mongodb connected successfully");
@@ -18,7 +17,7 @@ const adminSchema = new Schema({
     password: { type: String, required: true },
     campusId: { type: String, required: true },
     campusName: { type: String, required: true },
-});
+},{ timestamps: true });
 
 const studentSchema = new Schema({
     name: { type: String, required: true },
@@ -26,7 +25,7 @@ const studentSchema = new Schema({
     password: { type: String, required: true },
     campusId: { type: String, required: true },
     campusName: { type: String, required: true },
-});
+},{ timestamps: true });
 
 const counsellorSchema = new Schema({
   name: { type: String, required: true },
@@ -36,11 +35,11 @@ const counsellorSchema = new Schema({
   campusName: { type: String, required: true },
   specialization: { type: String },  // optional: e.g., "Career", "Mental Health"
   availability: { type: Boolean, default: true } // whether counsellor is available for sessions
-});
+},{ timestamps: true });
 
-const adminModel = mongoose.model(adminSchema,admin);
-const studentModel = mongoose.model(studentSchema,student);
-const counsellorModel = mongoose.model(counsellorSchema,counsellor);
+const adminModel = mongoose.model("admin",adminSchema);
+const studentModel = mongoose.model("student",studentSchema);
+const counsellorModel = mongoose.model("counsellor",counsellorSchema);
 
 module.exports = {
     studentModel,

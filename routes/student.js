@@ -1,5 +1,6 @@
 const express = require('express');
 const studentRouter = express.Router();
+const {studentModel} = require('../db');
 const  JWT  = require('jsonwebtoken');
 const {studentauth} = require('../middlewares/studentauth');
 const {JWT_STUDENT_SECRET} = require ('../config');
@@ -34,17 +35,16 @@ studentRouter.post('/signin',async function (req,res){
         email  : email,
     });
     if(!student){
-        res.status(400).json({message : "the user is not signed up"});
-        return;
+        return res.status(400).json({message : "the student is not signed up"});
+        
     }
-    const compare = await bcrypt.compare(password,student.password);  
-    if(!compare){
-        res.json({message : "password is incorrect"});
-        return;
+    const match = await bcrypt.compare(password,student.password);  
+    if(!match){
+        return res.json({message : "password is incorrect"});
+        
     }
-    const token = JWT.sign(student.email,JWT_STUDENT_SECRET);
-    localStorage.setItem({token : token});
-    res.json({message : "user is signed up"})
+    const token = JWT.sign({email : student.email},JWT_STUDENT_SECRET);
+    return res.json({message : "student is signed in",token});
     
 });    
 
