@@ -3,7 +3,7 @@ const express = require ('express');
 const JWT = require ('jsonwebtoken');
 const mongoose = require('mongoose');
 const {mongodburl, MONGODBURL} = require('./config');
-const {port} = require('./config');
+const {PORT} = require('./config');
 
 const app = express();
 app.use(express.json());
@@ -14,14 +14,14 @@ const {studentRouter} = require('./routes/student');
 
 
 
-app.use("/user",studentRouter);
+app.use("/student",studentRouter);
 app.use("/admin",adminRouter);
 app.use("/counsellor",counsellorRouter);
 
 async function main(){
     await mongoose.connect(MONGODBURL);
-    app.listen(port,()=>{
-        console.log(`lsitening on ${port}`);
+    app.listen(PORT,()=>{
+        console.log(`lsitening on ${PORT}`);
     });
 }
 main();
