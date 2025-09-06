@@ -1,8 +1,9 @@
 const express = require('express');
 const counsellorRouter = express.Router();
 const {counsellorModel} = require('../db');
+const {resourceModel} = require('../db');
 const  JWT  = require('jsonwebtoken');
-const {counsellorauth} = require('../middlewares/studentauth');
+const {counsellorauth} = require('../middlewares/counsellorauth');
 const {JWT_COUNSELLOR_SECRET} = require ('../config');
 const bcrypt = require('bcrypt');
 
@@ -43,11 +44,29 @@ counsellorRouter.post('/signin',async function (req,res){
         return res.json({message : "password is incorrect"});
         
     }
-    const token = JWT.sign({email : counsellor.email},JWT_COUNSELLOR_SECRET);
+    const token = JWT.sign({email:counsellor.email , _id : counsellor._id},JWT_COUNSELLOR_SECRET);
     
     return res.json({message : "counsellor is signed in",token});
     
 });    
+
+counsellorRouter.post('/resource',counsellorauth,async function(req,res){
+    const {title,description,type,link,status,uploadedBy} = req.body;
+    try{
+        const resource = await resourceModel.create({
+            title: title,
+            description: description,
+            type: type, 
+            link: link,
+            status: 'pending',
+            uploadedBy: req.counsellor._id,
+        });
+        return res.status (200).json({message : "resource uploaded successfully", resource});
+    }
+    catch(error){
+        return res.status(500).json({message : "error in uploading the resource", error: error.message});
+    };
+});
 
 module.exports = {
     counsellorRouter : counsellorRouter,

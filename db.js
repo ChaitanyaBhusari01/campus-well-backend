@@ -33,18 +33,31 @@ const counsellorSchema = new Schema({
   password: { type: String, required: true },
   campusId: { type: String, required: true },
   campusName: { type: String, required: true },
-  specialization: { type: String },  // optional: e.g., "Career", "Mental Health"
-  availability: { type: Boolean, default: true } // whether counsellor is available for sessions
+  specialization: { type: String },  
+  availability: { type: Boolean, default: true } 
 },{ timestamps: true });
+
+
+const resourceSchema = new Schema({
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    type: { type: String, enum: ["article", "video", "audio"], required: true },
+    link: { type: String, required: true },
+    status: { type: String, enum: ['approved', 'pending','rejected'], default: 'pending' },
+    uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: "counsellor" ,}
+},
+{ timestamps: true});
 
 const adminModel = mongoose.model("admin",adminSchema);
 const studentModel = mongoose.model("student",studentSchema);
 const counsellorModel = mongoose.model("counsellor",counsellorSchema);
+const resourceModel = mongoose.model("resource",resourceSchema);
 
 module.exports = {
     studentModel,
     adminModel,
-    counsellorModel
+    counsellorModel,
+    resourceModel
 };
 
  
