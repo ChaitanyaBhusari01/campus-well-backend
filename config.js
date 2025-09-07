@@ -14,5 +14,4 @@ module.exports = {
     JWT_STUDENT_SECRET,
     JWT_COUNSELLOR_SECRET,
     PORT,
-    
 };
