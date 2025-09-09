@@ -11,6 +11,8 @@ mongoose.connect(MONGODBURL)
 })
 const Schema = mongoose.Schema;
 
+const ObjectId = mongoose.Schema.Types.ObjectId;
+
 const adminSchema = new Schema({
     name: { type: String, required: true },
     email: { type: String, unique: true, required: true },
@@ -21,7 +23,12 @@ const adminSchema = new Schema({
 
 const studentSchema = new Schema({
     name: { type: String, required: true },
-    email: { type: String, unique: true, required: true },
+    email: { type: String, 
+            unique: true, 
+            required: true ,
+            trim : true ,
+            lowercase : true
+        },
     password: { type: String, required: true },
     campusId: { type: String, required: true },
     campusName: { type: String, required: true },
@@ -29,12 +36,17 @@ const studentSchema = new Schema({
 
 const counsellorSchema = new Schema({
   name: { type: String, required: true },
-  email: { type: String, unique: true, required: true },
+  email: { type: String, unique: true, required: true, trim: true, lowercase: true },
   password: { type: String, required: true },
   campusId: { type: String, required: true },
   campusName: { type: String, required: true },
   specialization: { type: String },  
-  availability: { type: Boolean, default: true } 
+  availability: [
+    { 
+        day :{type : String} ,
+        slots:[String]
+    }
+] 
 },{ timestamps: true });
 
 
@@ -44,20 +56,41 @@ const resourceSchema = new Schema({
     type: { type: String, enum: ["article", "video", "audio"], required: true },
     link: { type: String, required: true },
     status: { type: String, enum: ['approved', 'pending','rejected'], default: 'pending' },
-    uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: "counsellor" ,}
+    uploadedBy: { type: ObjectId, ref: "counsellor" ,}
 },
 { timestamps: true});
+
+const helplineSchema = new Schema({
+    organization : {type : String , required : true},
+    phoneNumber : {type : String , required : true},
+    availability : {type : String ,required : true},
+    type : {type : String,required : true},
+    languages : [String]
+});
+
+const bookingSchema = new Schema ({
+  studentId: ObjectId,
+  counsellorId: ObjectId,
+  date: Date,
+  slot: String,
+  status: { type: String, enum: ["pending", "confirmed", "completed", "cancelled"], default: "pending" },
+  notes: String
+},{timestamps : true});
 
 const adminModel = mongoose.model("admin",adminSchema);
 const studentModel = mongoose.model("student",studentSchema);
 const counsellorModel = mongoose.model("counsellor",counsellorSchema);
 const resourceModel = mongoose.model("resource",resourceSchema);
+const helplineModel = mongoose.model("helpline",helplineSchema);
+const bookingModel = mongoose.model ("booking",bookingSchema);
 
 module.exports = {
     studentModel,
     adminModel,
     counsellorModel,
-    resourceModel
+    resourceModel,
+    helplineModel,
+    bookingModel
 };
 
  
