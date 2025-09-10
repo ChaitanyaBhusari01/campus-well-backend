@@ -41,7 +41,10 @@ counsellorRouter.post('/signin', async function (req, res) {
   }
 
   const token = JWT.sign(
-    { _id: counsellor._id, email: counsellor.email },
+    { _id: counsellor._id,
+      email: counsellor.email,
+      campusId : counsellor.campusId
+    },
     JWT_COUNSELLOR_SECRET
   );
 

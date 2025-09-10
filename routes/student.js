@@ -1,6 +1,6 @@
 const express = require('express');
 const studentRouter = express.Router();
-const { studentModel, resourceModel } = require('../db');
+const { studentModel, resourceModel ,bookingModel, counsellorModel , helplineModel} = require('../db');
 const JWT = require('jsonwebtoken');
 const { studentauth } = require('../middlewares/studentauth');
 const { JWT_STUDENT_SECRET } = require('../config');
@@ -37,7 +37,7 @@ studentRouter.post('/signin', async function (req, res) {
     return res.status(401).json({ message: "Password is incorrect" });
   }
 
-  const token = JWT.sign({ _id: student._id, email: student.email }, JWT_STUDENT_SECRET);
+  const token = JWT.sign({ _id: student._id, email: student.email ,campusId :student.campusId }, JWT_STUDENT_SECRET);
   return res.status(200).json({ message: "Student signed in successfully", token });
 });
 
@@ -51,6 +51,39 @@ studentRouter.get('/resource', studentauth, async function (req, res) {
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Problem while loading the resources from the library" });
+  }
+});
+
+studentRouter.get('/counsellors',studentauth ,async function(req,res){
+  try{
+    const campusId = req.student.campusId;
+    const counsellors  = await counsellorModel.find({campusId}).select(-"password");
+    if(counsellors.length === 0){
+      return res.json({message : "there are no counsellors currently registered for your campus"});
+    }
+    return res.status(200).json({counsellors});
+  }
+  catch(error){
+    return res.status(500).json({message : "problem while retrirving the counsellors from db"})
+  }
+});
+
+studentRouter.post('/bookings',studentauth,async function(req,res){
+
+});
+
+studentRouter.get('/helpline/:language',studentauth,async function (req,res){
+  const language = req.params.language;
+  try{
+    const helplines = await helplineModel.find({language});
+    if(helplines.lenght === 0){
+      return res.status(403).json({message : "there are no helplines for the specified language"});
+    }
+    return res.status(200).json({helplines});
+
+  }
+  catch(error){
+    return res.status(500).json({message :"problem in fetching the helplines from the DB"});
   }
 });
 
