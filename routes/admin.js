@@ -36,7 +36,7 @@ adminRouter.post('/signin', async function (req, res) {
     return res.status(401).json({ message: "Password is incorrect" });
   }
 
-  const token = JWT.sign({ _id: admin._id, email: admin.email }, JWT_ADMIN_SECRET);
+  const token = JWT.sign({ _id: admin._id, email: admin.email,campusId : admin.campusId }, JWT_ADMIN_SECRET);
   res.status(200).json({ message: "Admin signed in successfully", token });
 });
 
