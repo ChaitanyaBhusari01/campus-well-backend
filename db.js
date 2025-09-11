@@ -32,6 +32,15 @@ const studentSchema = new Schema({
     password: { type: String, required: true },
     campusId: { type: String, required: true },
     campusName: { type: String, required: true },
+    bookings : [
+        {
+            startTime : String,
+            endTime : String,
+            counsellorId : {type : ObjectId , ref : "counsellor"},
+            date : Date
+
+        }
+    ]
 },{ timestamps: true });
 
 const counsellorSchema = new Schema({
@@ -42,9 +51,12 @@ const counsellorSchema = new Schema({
   campusName: { type: String, required: true },
   specialization: { type: String },  
   availability: [
-    { 
+    {
+        date : {type : Date , required : true}, 
         day :{type : String} ,
-        slots:[String]
+        startTime : {type : String , required : true},
+        endTime : {type : String , required : true},
+        isbooked : {type : Boolean , default : 'false'}
     }
 ] 
 },{ timestamps: true });
@@ -69,8 +81,8 @@ const helplineSchema = new Schema({
 });
 
 const bookingSchema = new Schema ({
-  studentId: ObjectId,
-  counsellorId: ObjectId,
+  studentId: {type : ObjectId,ref : "student"},
+  counsellorId: {type : ObjectId,ref : "counsellor"},
   date: Date,
   slot: String,
   status: { type: String, enum: ["pending", "confirmed", "completed", "cancelled"], default: "pending" },

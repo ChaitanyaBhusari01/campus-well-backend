@@ -68,7 +68,7 @@ studentRouter.get('/counsellors',studentauth ,async function(req,res){
   }
 });
 
-studentRouter.post('/bookings',studentauth,async function(req,res){
+studentRouter.post('/bookings/:counsellorId/:slot',studentauth,async function(req,res){
 
 });
 
@@ -86,6 +86,7 @@ studentRouter.get('/helpline/:language',studentauth,async function (req,res){
     return res.status(500).json({message :"problem in fetching the helplines from the DB"});
   }
 });
+
 
 module.exports = {
   studentRouter: studentRouter,
