@@ -83,7 +83,7 @@ const helplineSchema = new Schema({
 const bookingSchema = new Schema ({
   studentId: {type : ObjectId,ref : "student"},
   counsellorId: {type : ObjectId,ref : "counsellor"},
-  date: Date,
+  date: {type:Date},
   slot: String,
   status: { type: String, enum: ["pending", "confirmed", "completed", "cancelled"], default: "pending" },
   notes: String

@@ -69,6 +69,37 @@ studentRouter.get('/counsellors',studentauth ,async function(req,res){
 });
 
 studentRouter.post('/bookings/:counsellorId/:slot',studentauth,async function(req,res){
+  const {counsellorId , slotId } = req.params;
+  try{
+    const counsellor = await counsellorModel.findOneAndUpdate(
+      {_id:counsellorId ,"availability._id" : slotId,"availabilities.isBooked" : false},
+      {$set :{ "availability.isBooked" : true}},
+      {new : true},
+    );
+    if(!counsellor){
+      return res.status(403).json({message : "the slot is already booked "});
+    } 
+    else{
+      const bookedSlot =counsellor.availability.find(s => s._id.toString() === slotId);
+
+      // Step 3: Create booking record
+      const booking = await bookingModel.create({
+        studentId,
+        counsellorId,
+        slotId,
+        date: bookedSlot.date,
+        startTime: bookedSlot.startTime,
+        endTime: bookedSlot.endTime
+      });
+
+      res.json({ message: "Booking successful", booking });
+    }
+  }
+  catch(error){
+    return res.status(500).json({message : `there was a error while booking a appointment ${error}`});
+  }
+
+
 
 });
 
